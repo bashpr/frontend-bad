@@ -1,7 +1,6 @@
-import React from 'react';
 import { Filter, X, Calendar } from 'lucide-react';
 import { Card, Button, Input, Badge } from '../ui';
-import { FilterState } from '../../types';
+import type { FilterState } from '../../types';
 
 interface FilterPanelProps {
   filters: FilterState;
@@ -26,13 +25,13 @@ const regionOptions = [
   { value: 'West', label: 'West' }
 ];
 
-export const FilterPanel: React.FC<FilterPanelProps> = ({
+export const FilterPanel = ({
   filters,
   onFiltersChange,
   hasActiveFilters,
   resultCount,
   totalCount
-}) => {
+}: FilterPanelProps) => {
   const handleClearFilters = () => {
     onFiltersChange({
       dateRange: { startDate: '', endDate: '' },
@@ -47,10 +46,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
       ? [...filters.categories, category]
       : filters.categories.filter(c => c !== category);
     
-    onFiltersChange({
-      ...filters,
-      categories: newCategories
-    });
+    onFiltersChange({ ...filters, categories: newCategories });
   };
 
   const handleRegionChange = (region: string, checked: boolean) => {
@@ -58,10 +54,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
       ? [...filters.regions, region]
       : filters.regions.filter(r => r !== region);
     
-    onFiltersChange({
-      ...filters,
-      regions: newRegions
-    });
+    onFiltersChange({ ...filters, regions: newRegions });
   };
 
   return (
@@ -85,18 +78,13 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
         </div>
 
         <div className="space-y-4">
-          {/* Search */}
           <Input
             label="Search"
             placeholder="Search customers, products..."
             value={filters.searchTerm}
-            onChange={(e) => onFiltersChange({
-              ...filters,
-              searchTerm: e.target.value
-            })}
+            onChange={(e) => onFiltersChange({ ...filters, searchTerm: e.target.value })}
           />
 
-          {/* Date Range */}
           <div className="space-y-2">
             <label className="block text-sm font-medium text-gray-700 flex items-center gap-2">
               <Calendar className="w-4 h-4" />
@@ -122,7 +110,6 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
             />
           </div>
 
-          {/* Categories */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Categories
@@ -142,7 +129,6 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
             </div>
           </div>
 
-          {/* Regions */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Regions
@@ -162,7 +148,6 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
             </div>
           </div>
 
-          {/* Clear Filters */}
           {hasActiveFilters && (
             <Button 
               variant="outline" 
@@ -175,7 +160,6 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
         </div>
       </Card>
 
-      {/* Active Filters Summary */}
       {hasActiveFilters && (
         <Card padding="sm">
           <h3 className="text-sm font-medium text-gray-900 mb-2">Active Filters</h3>
