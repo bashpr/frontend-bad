@@ -1,5 +1,4 @@
-// src/App.tsx - WORKING SIMPLIFIED VERSION
-import React, { useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { 
   TrendingUp, 
   DollarSign, 
@@ -9,15 +8,16 @@ import {
   Filter,
   Calendar,
   X,
-  LineChart,
+  LineChart as LineChartIcon,
   BarChart3,
-  PieChart
+  PieChart as PieChartIcon
 } from 'lucide-react';
-
-// Import your data and types
 import { mockSalesData } from './data/mockSalesData';
 import { FilterState } from './types';
-import { applyFilters, calculateMetrics } from './utils/dataUtils';
+import { applyFilters, calculateMetrics, getMonthlyData, getCategoryData, getRegionData } from './utils/dataUtils';
+import { SalesLineChart } from './components/charts/LineChart';
+import { CategoryBarChart } from './components/charts/BarChart';
+import { RegionPieChart } from './components/charts/PieChart';
 
 const initialFilters: FilterState = {
   dateRange: { startDate: '', endDate: '' },
@@ -303,15 +303,11 @@ function App() {
               {/* Monthly Sales Chart */}
               <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                 <div className="flex items-center gap-2 mb-6">
-                  <LineChart className="w-5 h-5 text-gray-600" />
+                  <LineChartIcon className="w-5 h-5 text-gray-600" />
                   <h3 className="text-lg font-semibold text-gray-900">Monthly Sales Trend</h3>
                 </div>
-                <div className="h-80 flex items-center justify-center border-2 border-dashed border-gray-200 rounded-lg">
-                  <div className="text-center">
-                    <LineChart className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                    <p className="text-gray-500 font-medium">Line Chart Implementation</p>
-                    <p className="text-sm text-gray-400">Use Recharts LineChart component</p>
-                  </div>
+                <div className="h-80">
+                  <SalesLineChart data={getMonthlyData(filteredData)} />
                 </div>
               </div>
 
@@ -322,24 +318,18 @@ function App() {
                     <BarChart3 className="w-5 h-5 text-gray-600" />
                     <h3 className="text-lg font-semibold text-gray-900">Sales by Category</h3>
                   </div>
-                  <div className="h-64 flex items-center justify-center border-2 border-dashed border-gray-200 rounded-lg">
-                    <div className="text-center">
-                      <BarChart3 className="w-10 h-10 text-gray-400 mx-auto mb-2" />
-                      <p className="text-gray-500 text-sm">Bar Chart</p>
-                    </div>
+                  <div className="h-64">
+                    <CategoryBarChart data={getCategoryData(filteredData)} />
                   </div>
                 </div>
 
                 <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                   <div className="flex items-center gap-2 mb-6">
-                    <PieChart className="w-5 h-5 text-gray-600" />
+                    <PieChartIcon className="w-5 h-5 text-gray-600" />
                     <h3 className="text-lg font-semibold text-gray-900">Revenue by Region</h3>
                   </div>
-                  <div className="h-64 flex items-center justify-center border-2 border-dashed border-gray-200 rounded-lg">
-                    <div className="text-center">
-                      <PieChart className="w-10 h-10 text-gray-400 mx-auto mb-2" />
-                      <p className="text-gray-500 text-sm">Pie Chart</p>
-                    </div>
+                  <div className="h-64">
+                    <RegionPieChart data={getRegionData(filteredData)} />
                   </div>
                 </div>
               </div>
@@ -429,8 +419,6 @@ function App() {
             </div>
           )}
         </div>
-
-        
       </div>
     </div>
   );
